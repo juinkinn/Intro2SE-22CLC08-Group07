@@ -107,3 +107,41 @@ header {
   padding: 1rem;
   height: 38px;
 }
+
+.header-auth .button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000;
+  cursor: pointer;
+}
+
+.header-auth .button-register {
+  background-color: #c7e0fe;
+  border-color: #000;
+  margin-left: 12px;
+}
+
+.header-auth .text-wrapper {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  color: #000;
+  font-size: 13px;
+  letter-spacing: 0px;
+  line-height: 100%;
+  white-space: nowrap;
+  font-style: normal;
+}
+
+.header-auth .button-register .text-wrapper {
+  color: #000;
+}
