@@ -1,6 +1,6 @@
 #footer 
 {
-    background-color: white;
+    background-color: #E5F2EF;
     display: flex;
     grid-template-columns: repeat(3, 1fr); /* 3 cột với kích thước bằng nhau */
     gap: 20px; /* Khoảng cách giữa các cột */
