@@ -2,8 +2,8 @@
 {
     background-color: #E5F2EF;
     display: flex;
-    grid-template-columns: repeat(3, 1fr); /* 3 cột với kích thước bằng nhau */
-    gap: 20px; /* Khoảng cách giữa các cột */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
     padding: 10px;
 }
 #footer ul 
@@ -94,14 +94,16 @@
     align-items: center;
 }
 
-.subscribe input[type="email"] {
+.subscribe input[type="email"]
+{
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
 }
 
-.subscribe button {
+.subscribe button 
+{
     border: none;
     background-color: #0FE3AF;
     color: white;
@@ -110,12 +112,14 @@
     border-radius: 5px;
 }
 
-.subscribe button:hover {
+.subscribe button:hover 
+{
     background-color: #0152A8;
 }
 
 /* Điều chỉnh cho các màn hình nhỏ hơn */
-@media (max-width: 768px) {
+@media (max-width: 768px) 
+{
     #footer {
         flex-direction: column;
         align-items: flex-start;
