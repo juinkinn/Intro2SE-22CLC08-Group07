@@ -852,3 +852,85 @@ ul{
   font-weight: 500;
   letter-spacing: 0.4px;
 }
+
+/* footer ===================== */
+footer{
+  width: 100%;
+  background-color:  #f5f7fb;
+}
+.footer-container{
+  max-width: 1200px;
+  width: 90%;
+  margin: 0px auto;
+  padding: 50px 0px;
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.footer-company-box{
+  max-width: 330px;
+}
+.footer-company-box p{
+  color: #585858;
+  margin: 5px 0px;
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+  line-height: 1.4rem;
+}
+.footer-social{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.footer-social a{
+  margin-top: 10px;
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #e9e9e9;
+  color: #333333;
+  font-size: 0.9rem;
+  transition: all ease 0.3s;
+}
+.footer-social a:hover{
+  background-color: #122853;
+  color: #ffffff;
+}
+.footer-link-box strong{
+  font-size: 1.2rem;
+  color: #122853;
+  font-weight: 600;
+}
+.footer-link-box ul{
+  margin-top: 5px;
+}
+.footer-container ul li a{
+  color: #585858;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  display: flex;
+  transition: all ease 0.3s;
+}
+.footer-container ul li a:hover{
+  color: #122853;
+}
+.footer-bottom{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  grid-gap: 10px;
+  border-top: 1px solid #e9e9e9;
+  padding: 20px 0px;
+  max-width: 1200px;
+  width: 90%;
+  margin: auto;
+}
+.footer-bottom span{
+  color: #252525;
+  font-size: 0.9rem;
+}
