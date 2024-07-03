@@ -23,6 +23,7 @@ body
 .title 
 {
     margin-right: 10px; 
+    margin-left: 150px;
 }
 
 .link-box 
@@ -45,6 +46,7 @@ body
 {
     display: flex;
     align-items: center;
+    margin-right: 150px;
 }
 
 .box 
