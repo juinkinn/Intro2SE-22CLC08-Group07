@@ -196,7 +196,7 @@ main {
 }
 
 .vaccine-development {
-  position: absolute;
+  position: relative;
   width: 550px;
   height: 550px;
   top: 13%;
