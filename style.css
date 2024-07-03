@@ -166,3 +166,56 @@ ul{
   font-size: 0.5rem;
   padding-bottom: 1px;
 }
+
+/*==appointment-search=====================*/
+.appointment-search-container{
+  max-width: 1000px;
+  width: 90%;
+  background-color: #ffffff;
+  padding:20px;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 2px 16px 30px rgba(0,0,0,0.12);
+  margin-top: -60px;
+  z-index: 3;
+  position: relative;
+}
+.appointment-search-container h3{
+  color: #122853;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+.appointment-search{
+  display: grid;
+  grid-template-columns: 1fr 1fr 60px;
+  grid-gap: 10px;
+}
+.appo-search-box{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f7fbff;
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid #e4e4e4;
+}
+.appo-search-box i{
+  color: #535353;
+  margin-right: 10px;
+}
+.appo-search-box input{
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+.appointment-search button{
+  background-color: #014dd5;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
