@@ -199,7 +199,7 @@ main {
   position: absolute;
   width: 550px;
   height: 550px;
-  top: 0;
-  right: 30px;
+  top: 13%;
+  right: 43px;
   object-fit: cover;
 }
