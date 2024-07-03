@@ -934,3 +934,223 @@ footer{
   color: #252525;
   font-size: 0.9rem;
 }
+
+/* making-responsive =========== */
+.menu-icon,
+.menu-btn{
+    display: none;
+}
+@media(max-width:1200px){
+    .footer-container{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 40px;
+    }
+}
+@media(max-width:1050px){
+    .hero-content{
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+        margin: 50px auto;
+    }
+    .hero-text{
+        margin-bottom: 40px;
+        background-color: #ffffff;
+        padding: 30px;
+        margin-top: 0px;
+    }
+}
+@media(max-width:950px){
+    .navigation{
+        justify-content: space-between;
+        padding: 30px 0px;
+        position: relative;
+        width: 100%;
+        padding: 20px;
+    }
+    .logo,
+    .nav-appointment-btn{
+        z-index: 103;
+    }
+    .logo{
+        margin-right: auto;
+        margin-left: 20px;
+    }
+    .navigation .menu{
+        display: none;
+        position: absolute;
+        left: 0px;
+        top:100%;
+        background-color: #ffffff;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+        z-index: 102;
+        box-shadow: 2px 30px 30px rgba(0,0,0,0.06);
+    }
+    .navigation .menu::after{
+        content: '';
+        position: absolute;
+        left: 0px;
+        top: -100%;
+        background-color: #ffffff;
+        width: 100%;
+        height: 100%;
+    }
+    .navigation .menu li{
+        width:100%;
+        margin: 0px;
+        padding: 0px;
+    }
+    .navigation .menu li a{
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        margin: 0px;
+        padding: 30px 20px;
+    }
+    .menu-icon{
+        display: block;
+    }
+    .navigation .menu-icon{
+        cursor: pointer;
+        float: right;
+        padding: 10px 0px;
+        position: relative;
+        user-select: none;
+        z-index: 106;
+    }
+    .navigation .menu-icon .nav-icon{
+        background-color: #181818;
+        display: block;
+        position: relative;
+        height: 2px;
+        transition: background 0.2s ease-out;
+        width: 25px;
+    }
+    .navigation .menu-icon .nav-icon::before,
+    .navigation .menu-icon .nav-icon::after{
+        background-color: #181818;
+        content: '';
+        position: absolute;
+        height: 100%;
+        transition: all ease-out 0.2s;
+        width: 100%;
+    }
+
+    .navigation .menu-icon .nav-icon::before{
+        top: 9px;
+    }
+    .navigation .menu-icon .nav-icon::after{
+        top: -9px;
+    }
+    .navigation .menu-icon:checked ~ .menu-icon .nav-icon,
+    .navigation .menu-btn:checked ~ .menu-icon .nav-icon{
+        background-color: transparent;
+    }
+    .navigation .menu-btn:checked ~ .menu-icon .nav-icon::before{
+        transform: rotate(-45deg);
+        top: 0px;
+    }
+    .navigation .menu-btn:checked ~ .menu-icon .nav-icon::after{
+        transform: rotate(45deg);
+        top: 0px;
+    }
+ 
+    .navigation .menu-btn:checked ~ .menu{
+        display: block;
+    }
+
+    .what-we-provide{
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+    }
+    #our_story{
+        grid-template-columns: 1fr;
+    }
+    .our-story-img img{
+        max-height: 400px;
+    }
+    .our-stroy-text{
+        padding: 30px;
+    }
+    #why-choose-us{
+        grid-template-columns: 1fr;
+    }
+    .testimonials-content{
+        grid-template-columns: 1fr;
+    }
+    .testimonials-img{
+        margin-right: auto;
+    }
+    .testimonials-img img{
+        width: 100%;
+    }
+}
+@media(max-width:620px){
+    .hero-text{
+        padding: 20px;
+    }
+    .hero-text h1,
+    .our-stroy-text h2,
+    .services-heading h2,
+    .why-choose-us-left h3,
+    .why-choose-us-right h3,
+    .our-team-heading h3,
+    .testimonials-heading h3{
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+    }
+    .hero-text-btns{
+        flex-direction: column;
+    }
+    .hero-text-btns a{
+        width: 100%;
+        margin-top: 5px;
+    }
+    .appointment-search{
+        grid-template-columns: 1fr;
+    }
+    .appointment-search button{
+        height: 45px;
+    }
+    .what-we-provide{
+        grid-template-columns: 1fr;
+    }
+    .our-stroy-text{
+        padding: 20px 15px;
+    }
+    .story-numbers-box{
+        padding: 15px;
+    }
+    .story-numbers-box strong{
+        font-size: 1.4rem;
+    }
+    .why-choose-us-right,
+    .why-choose-us-left{
+        padding: 30px 20px;
+    }
+    .why-choose-box-container{
+        grid-template-columns: 1fr;}
+    #subscribe h3{
+        font-size: 1.4rem;
+        line-height: 1.8rem;
+    }
+    #subscribe{
+        padding: 20px;
+    }
+	 .footer-container{
+        grid-template-columns: 1fr;
+    }
+}
+@media(max-width:320px){
+    .nav-appointment-btn{
+        display: none;
+    }
+    .story-numbers-container{
+        grid-template-columns: 1fr;
+    }
+}
