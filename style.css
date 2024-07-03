@@ -76,6 +76,7 @@
   padding-left: 0.6rem;
 }
 
+/* Styles for main content and introduce */
 .main-content {
   position: relative;
   margin-left: 210px;
@@ -150,21 +151,21 @@ header {
 
 main {
   background: #ECF2FF;
-  min-height: 90vh;
+  min-height: 100vh;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
 }
 
 .introduce {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 20px 0;
+  align-items: flex-start;
+  margin: 26px 0px 0px 17px;
 }
 
 .heading {
+  position: relative;
   font-family: "Merriweather", Helvetica;
   font-weight: 400;
   color: #1e1e1e;
@@ -174,6 +175,7 @@ main {
 }
 
 .sub-heading {
+  position: relative;
   font-family: "Merriweather", Helvetica;
   font-weight: 400;
   color: #1e1e1e;
@@ -181,13 +183,23 @@ main {
   letter-spacing: -0.34px;
   line-height: 27px;
   margin-top: 5px;
-  text-align: center;
+  margin-left: 204px;
 }
 
 .home-screen-widget {
-  width: 90%;
+  width: 95%;
   height: 300px;
-  margin: 20px 0;
+  margin: 20px 30px;
   border-radius: 21px;
   background: linear-gradient(180deg, rgb(199, 224, 254) 0%, rgb(88, 175, 232) 100%);
+  float: left;
+}
+
+.vaccine-development {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  top: 0;
+  right: 30px;
+  object-fit: cover;
 }
