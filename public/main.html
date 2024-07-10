@@ -184,7 +184,7 @@
 
                 const result = await response.json();
                 if (response.ok) {
-                    window.location.href = '/main.html';
+                    window.location.href = '/index.html';
                 } else {
                     document.getElementById('loginMessage').textContent = result.message || 'Login failed';
                 }
