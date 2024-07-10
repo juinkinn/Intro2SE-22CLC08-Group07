@@ -7,6 +7,12 @@ const bodyParser = require('body-parser');
 const app = express();
 
 // Middleware
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+// Serve the index.html file from the root directory
+app.get('/index.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
