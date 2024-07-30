@@ -1,50 +1,60 @@
+const mysql = require("mysql");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const { promisify } = require("util");
 
-// const mysql = require("mysql");
-// const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
-// const { promisify } = require("util");
+const db = mysql.createConnection({
+    host: process.env.HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
+});
 
-// const db = mysql.createConnection({
-//     host: process.env.HOST,
-//     user: process.env.DATABASE_USER,
-//     password: process.env.PASSWORD,
-//     database: process.env.DATABASE
-// });
+// Register a new user
+exports.register = (req, res) => {
+    const { name, email, password, passwordConfirm } = req.body;
 
-// // Register a new user
-// exports.register = (req, res) => {
-//     console.log(req.body);
-//     const { name, email, password, passwordConfirm } = req.body;
-//     db.query('SELECT email from users WHERE email = ?', [email], async (err, results) => {
-//         if (err) {
-//             console.log(err);
-//             return res.status(500).json({ message: 'Internal server error' });
-//         }
+    // Check if email already exists
+    db.query('SELECT email FROM users WHERE email = ?', [email], async (err, results) => {
+        if (err) {
+            console.error("Error checking existing email:", err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
 
-//         if (results.length > 0) {
-//             console.log("Email is already in use");
-//             return res.status(400).json({ message: "Email is already in use" });
-//         }
+        if (results.length > 0) {
+            console.log("Email is already in use");
+            return res.status(400).json({ message: "Email is already in use" });
+        }
 
-//         if (password !== passwordConfirm) {
-//             console.log("Passwords do not match");
-//             return res.status(400).json({ message: "Passwords do not match" });
-//         }
 
-//         let hashedPassword = await bcrypt.hash(password, 8); // Hash the password
+        try {
+            const hashedPassword = await bcrypt.hash(password, 8); // Hash the password
 
-//         db.query('INSERT INTO users SET ?', { name: name, email: email, password: hashedPassword }, (err, results) => {
-//             if (err) {
-//                 console.log(err);
-//                 return res.status(500).json({ message: 'Failed to register user' });
-//             }
-//             console.log("User registered successfully")
-//             res.status(201).json({ message: "User registered successfully" });
-//         });
-//     });
-// };
+            // Determine the user's role based on their email domain
+            let role = 'patient'; // Default role
+            if (email.endsWith('@admin.com') || email.includes('.medimate')) {
+                role = 'admin';
+            } else if (email.endsWith('@doctor.com') || email.includes('.doctor')) {
+                role = 'doctor';
+            }
 
-// // Login user
+            // Insert new user into database
+            db.query('INSERT INTO users SET ?', { name, email, password: hashedPassword, role }, (err, results) => {
+                if (err) {
+                    console.error("Error registering user:", err);
+                    return res.status(500).json({ message: 'Failed to register user' });
+                }
+                console.log("User registered successfully");
+                res.status(201).json({ message: "User registered successfully" });
+            });
+        } catch (error) {
+            console.error("Error hashing password:", error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    });
+};
+
+// Login user
 // exports.login = async (req, res) => {
 //     try {
 //         const { email, password } = req.body;
@@ -52,9 +62,10 @@
 //             return res.status(400).json({ message: "Please provide an email and password" });
 //         }
 
+//         // Retrieve user by email
 //         db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
 //             if (err) {
-//                 console.log(err);
+//                 console.error("Error retrieving user:", err);
 //                 return res.status(500).json({ message: 'Internal server error' });
 //             }
 
@@ -70,126 +81,34 @@
 //             }
 
 //             const id = results[0].id;
+//             const name = results[0].name;
+//             const role = results[0].role;
 
+//             // Generate JWT token
 //             const token = jwt.sign({ id }, process.env.JWT_SECRET, {
 //                 expiresIn: process.env.JWT_EXPIRES_IN
 //             });
 
-//             console.log("Generated token:", token); // Log the generated token
+//             console.log("Generated token:", token);
 
+//             // Set cookies
 //             const cookieOptions = {
 //                 expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
 //                 httpOnly: true
 //             };
 
-//             res.cookie('userSave', token, cookieOptions); // Set the cookie
+//             res.cookie('userSave', token, cookieOptions);
+//             res.cookie('userName', name);
+//             res.cookie('userRole', role);
 
-//             // Send a response indicating successful login
-//             res.status(200).json({ message: "Login successful" }); // Optionally, send JSON response
-
-//             // Uncomment below line if redirect doesn't happen on frontend
-//             // res.status(200).redirect("/profile.html"); // Redirect to profile.html upon successful login
+//             res.status(200).json({ message: "Login successful" });
 //         });
 //     } catch (err) {
-//         console.error(err);
+//         console.error("Error logging in:", err);
 //         res.status(500).json({ message: 'Internal server error' });
 //     }
 // };
 
-// // Middleware to check if user is logged in
-// exports.isLoggedIn = async (req, res, next) => {
-//     if (req.cookies.userSave) {
-//         try {
-//             // Verify the token
-//             const decoded = await promisify(jwt.verify)(req.cookies.userSave, process.env.JWT_SECRET);
-
-//             // Check if the user still exists
-//             db.query('SELECT * FROM users WHERE id = ?', [decoded.id], (err, results) => {
-//                 if (err) {
-//                     console.error(err);
-//                     return next();
-//                 }
-//                 if (!results || results.length === 0) {
-//                     return next();
-//                 }
-//                 req.user = results[0];
-//                 return next();
-//             });
-//         } catch (err) {
-//             console.error(err);
-//             return next();
-//         }
-//     } else {
-//         next();
-//     }
-// };
-
-// // Logout user
-// exports.logout = (req, res) => {
-//     res.clearCookie('userSave');
-//     res.status(200).redirect("/main.html"); // Redirect to main page upon logout
-// };
-
-
-// 27/06/2024
-// ================== End of MySQL_Login_Page/controllers/auth.js ==================
-
-
-const mysql = require("mysql");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const { promisify } = require("util");
-
-const db = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE
-});
-
-// Register a new user
-exports.register = (req, res) => {
-    console.log(req.body);
-    const { name, email, password, passwordConfirm } = req.body;
-    
-    db.query('SELECT email FROM users WHERE email = ?', [email], async (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-
-        if (results.length > 0) {
-            console.log("Email is already in use");
-            return res.status(400).json({ message: "Email is already in use" });
-        }
-/*
-        if (password !== passwordConfirm) {
-            console.log("Passwords do not match");
-            return res.status(400).json({ message: "Passwords do not match" });
-        }
-*/
-        let hashedPassword = await bcrypt.hash(password, 8); // Hash the password
-
-        // Determine the user's role based on their email
-        let role = 'patient'; // Default role
-        if (email.endsWith('@admin.com')) {
-            role = 'admin';
-        } else if (email.endsWith('@doctor.com')) {
-            role = 'doctor';
-        }
-
-        db.query('INSERT INTO users SET ?', { name, email, password: hashedPassword, role }, (err, results) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).json({ message: 'Failed to register user' });
-            }
-            console.log("User registered successfully")
-            res.status(201).json({ message: "User registered successfully" });
-        });
-    });
-};
-
-// Login user
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -197,9 +116,10 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: "Please provide an email and password" });
         }
 
+        // Retrieve user by email
         db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
             if (err) {
-                console.log(err);
+                console.error("Error retrieving user:", err);
                 return res.status(500).json({ message: 'Internal server error' });
             }
 
@@ -218,29 +138,32 @@ exports.login = async (req, res) => {
             const name = results[0].name;
             const role = results[0].role;
 
+            // Generate JWT token
             const token = jwt.sign({ id }, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRES_IN
             });
 
-            console.log("Generated token:", token); // Log the generated token
+            console.log("Generated token:", token);
 
+            // Set cookies
             const cookieOptions = {
                 expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
                 httpOnly: true
             };
 
-            res.cookie('userSave', token, cookieOptions); // Set the cookie
-            res.cookie('userName', name); // Set the user's name in a cookie
-            res.cookie('userRole', role); // Set the user's role in a cookie
+            res.cookie('userSave', token, cookieOptions);
+            res.cookie('userName', name);
+            res.cookie('userRole', role);
 
-            // Send a response indicating successful login
-            res.status(200).json({ message: "Login successful" }); // Optionally, send JSON response
-
-            // Uncomment below line if redirect doesn't happen on frontend
-            // res.status(200).redirect("/profile.html"); // Redirect to profile.html upon successful login
+            res.status(200).json({
+                message: "Login successful",
+                userId: id,
+                userName: name,
+                userRole: role
+            });
         });
     } catch (err) {
-        console.error(err);
+        console.error("Error logging in:", err);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -249,13 +172,13 @@ exports.login = async (req, res) => {
 exports.isLoggedIn = async (req, res, next) => {
     if (req.cookies.userSave) {
         try {
-            // Verify the token
+            // Verify JWT token
             const decoded = await promisify(jwt.verify)(req.cookies.userSave, process.env.JWT_SECRET);
 
-            // Check if the user still exists
+            // Check if user exists
             db.query('SELECT * FROM users WHERE id = ?', [decoded.id], (err, results) => {
                 if (err) {
-                    console.error(err);
+                    console.error("Error checking user:", err);
                     return next();
                 }
                 if (!results || results.length === 0) {
@@ -265,7 +188,7 @@ exports.isLoggedIn = async (req, res, next) => {
                 return next();
             });
         } catch (err) {
-            console.error(err);
+            console.error("Error verifying token:", err);
             return next();
         }
     } else {
@@ -275,8 +198,10 @@ exports.isLoggedIn = async (req, res, next) => {
 
 // Logout user
 exports.logout = (req, res) => {
+    // Clear cookies
     res.clearCookie('userSave');
     res.clearCookie('userName');
     res.clearCookie('userRole');
+
     res.status(200).redirect("/main.html"); // Redirect to main page upon logout
 };

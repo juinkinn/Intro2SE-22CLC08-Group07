@@ -184,7 +184,11 @@
 
                 const result = await response.json();
                 if (response.ok) {
-                    window.location.href = '/index.html';
+                    console.log('Login successful:', result);
+                    sessionStorage.setItem('userId', result.userId);
+                    sessionStorage.setItem('userName', result.userName);
+                    sessionStorage.setItem('userRole', result.userRole);
+                    window.location.href = '/public/card.html';
                 } else {
                     document.getElementById('loginMessage').textContent = result.message || 'Login failed';
                 }
