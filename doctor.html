@@ -1,0 +1,206 @@
+<span style="font-family: verdana, geneva, sans-serif;"><!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Doctor</title>
+      <link rel="stylesheet" href="style.css" />
+      <!-- Font Awesome Cdn Link -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    </head>
+    <body>
+      <div class="container">
+        <nav>
+          <ul>
+            <li><a href="#" class="logo">
+              <img src="#">
+              <span class="nav-item">Doctor</span>
+            </a></li>
+            <li><a href="#">
+              <i class="fas fa-menorah"></i>
+              <span class="nav-item">Dashboard</span>
+            </a></li>
+            <li><a href="#">
+              <i class="fas fa-comment"></i>
+              <span class="nav-item">Message</span>
+            </a></li>
+            <li><a href="#">
+              <i class="fas fa-database"></i>
+              <span class="nav-item">Form</span>
+            </a></li>
+            <li><a href="#">
+              <i class="fas fa-chart-bar"></i>
+              <span class="nav-item">Appointment</span>
+            </a></li>
+            <li><a href="#">
+              <i class="fas fa-cog"></i>
+              <span class="nav-item">Setting</span>
+            </a></li>
+    
+            <li><a href="#" class="logout">
+              <i class="fas fa-sign-out-alt"></i>
+              <span class="nav-item">Log out</span>
+            </a></li>
+          </ul>
+        </nav>
+    
+    
+        <section class="main">
+          <div class="main-top">
+            <h1>Today's Appointment</h1>
+            <i class="fas fa-user-cog"></i>
+          </div>
+          <div class="users">
+            <div class="card">
+              <img src="./pic/img1.jpg">
+              <h4>Audrey</h4>
+              <p>21 years old</p>
+              <button>Profile</button>
+            </div>
+            <div class="card">
+              <img src="./pic/img2.jpg">
+              <h4>Anna</h4>
+              <p>20 years old</p>
+              <button>Profile</button>
+            </div>
+            <div class="card">
+              <img src="./pic/img3.jpg">
+              <h4>John</h4>
+              <p>52 years old</p>
+              <button>Profile</button>
+            </div>
+            <div class="card">
+              <img src="./pic/img4.jpg">
+              <h4>Salina</h4>
+              <p>35 years old</p>
+              <button>Profile</button>
+            </div>
+          </div>
+    
+          <section class="appointment">
+            <div class="appointment-list">
+              <h1>Appointment List</h1>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Specialization</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>01</td>
+                    <td>Sam David</td>
+                    <td>25</td>
+                    <td>Ardiologist</td>
+                    <td>27/07/2024</td>
+                    <td>3:00PM</td>
+                    <td>
+                        <div class="dropdown">
+                          <button class="dropbtn">Action</button>
+                          <div class="dropdown-content">
+                            <a href="#" class="accept">Accept</a>
+                            <a href="#" class="decline">Decline</a>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr class="active">
+                    <td>02</td>
+                    <td>Balbina</td>
+                    <td>50</td>
+                    <td>Ardiologist</td>
+                    <td>27/01/2024</td>
+                    <td>4:00PM</td>
+                    <td>
+                        <div class="dropdown">
+                          <button class="dropbtn">Action</button>
+                          <div class="dropdown-content">
+                            <a href="#" class="accept">Accept</a>
+                            <a href="#" class="decline">Decline</a>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>03</td>
+                    <td>John</td>
+                    <td>31</td>
+                    <td>Ardiologist</td>
+                    <td>01/09/2024</td>
+                    <td>3:00PM</td>
+                    <td>
+                        <div class="dropdown">
+                          <button class="dropbtn">Action</button>
+                          <div class="dropdown-content">
+                            <a href="#" class="accept">Accept</a>
+                            <a href="#" class="decline">Decline</a>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>04</td>
+                    <td>Sara David</td>
+                    <td>42</td>
+                    <td>Ardiologist</td>
+                    <td>01/01/2024</td>
+                    <td>3:00PM</td>
+                    <td>
+                        <div class="dropdown">
+                          <button class="dropbtn">Action</button>
+                          <div class="dropdown-content">
+                            <a href="#" class="accept">Accept</a>
+                            <a href="#" class="decline">Decline</a>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>05</td>
+                    <td>Sara David</td>
+                    <td>42</td>
+                    <td>Ardiologist</td>
+                    <td>01/01/2024</td>
+                    <td>3:00PM</td>
+                    <td>
+                        <div class="dropdown">
+                          <button class="dropbtn">Action</button>
+                          <div class="dropdown-content">
+                            <a href="#" class="accept">Accept</a>
+                            <a href="#" class="decline">Decline</a>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
+                  <!-- <tr >
+                    <td>05</td>
+                    <td>Salina</td>
+                    <td>Coding</td>
+                    <td>03-24-22</td>
+                    <td>9:00AM</td>
+                    <td>4:00PM</td>
+                    <td><button>View</button></td>
+                  </tr>
+                  <tr >
+                    <td>06</td>
+                    <td>Tara Smith</td>
+                    <td>Testing</td>
+                    <td>03-24-22</td>
+                    <td>9:00AM</td>
+                    <td>4:00PM</td>
+                    <td><button>View</button></td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </div>
+    </body>
+  </html>
+</span>
