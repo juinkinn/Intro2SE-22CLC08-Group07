@@ -1,0 +1,84 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.profile {
+    padding: 20px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    border-radius: 10px;
+}
+
+.profile img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.profile h2 {
+    margin: 10px 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.profile a.btn, .profile a.delete-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.profile a.btn {
+    background-color: #21cdc0;
+}
+
+.profile a.btn:hover {
+    background-color: #1ba89a;
+}
+
+.profile a.delete-btn {
+    background-color: #283b6a;
+}
+
+.profile a.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+.profile p {
+    margin-top: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.profile p a {
+    color: #21cdc0;
+}
+
+.profile p a:hover {
+    text-decoration: underline;
+}
