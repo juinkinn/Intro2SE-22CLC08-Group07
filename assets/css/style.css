@@ -7501,3 +7501,98 @@ textarea.form-control {
   right: 0;
   color: #848e9f;
 }
+/*-----------------------
+    Symptom search
+------------------------*/
+/* Container for the search symptom section */
+.container-symptom {
+  width: 100%;
+  min-height: 60vh; /* Giảm chiều cao tối thiểu */
+  padding: 2%; /* Giảm padding */
+  background: url('assets/images/backgrounds/1.jpg') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+
+
+/* Search bar styling */
+.search-symptom {
+  width: 100%;
+  max-width: 800px; /* Đảm bảo không vượt quá chiều rộng tối đa */
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: white; /* Màu nền trắng của thanh tìm kiếm */
+  border-radius: 30px; /* Bo góc cho thanh tìm kiếm */
+  border: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+/* Styling for the input field inside the search bar */
+.search-symptom input {
+  background: transparent;
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 15px 20px;
+  font-size: 20px;
+  color: #26365e;
+  border-radius: 30px; /* Bo góc cho input */
+}
+
+/* Placeholder styling */
+.search-symptom input::placeholder {
+  color: #26365e;
+}
+
+/* Styling for the search button */
+.search-symptom button {
+  background: #26365e;
+  border: none;
+  cursor: pointer;
+  padding: 0 20px;
+  height: 100%;
+  width: 15%;
+  border-radius: 30px; /* Bo góc cho nút tìm kiếm */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Icon styling inside the search button */
+.search-symptom button i {
+  font-size: 1.5em;
+  color: white;
+}
+
+/* Heading styling */
+.heading-symptom {
+  margin-bottom: 20px;
+  text-align: center;
+  color: white; /* Màu chữ trắng */
+}
+
+/* Background image styling */
+.bg-img-symptom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+/* Footer margin adjustment */
+footer {
+  margin-top: 0;
+  padding: 10px 0; /* Điều chỉnh padding nếu cần */
+}
