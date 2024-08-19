@@ -1,0 +1,187 @@
+*{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+  body{
+    background: url('assets/images/backgrounds/2.jpg') center/cover no-repeat;
+  }
+  nav{
+    position: sticky;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    left: 0;
+    width: 90px;
+    /* width: 280px; */
+    background: #fff;
+    overflow: hidden;
+    transition: 1s;
+  }
+  nav:hover{
+    width: 280px;
+    transition: 1s;
+  }
+  .logo{
+    text-align: center;
+    display: flex;
+    margin: 10px 0 0 10px;
+    padding-bottom: 3rem;
+  }
+  
+  .logo img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+  }
+  .logo span{
+    font-weight: bold;
+    padding-left: 15px;
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+  a{
+    position: relative;
+    width: 280px;
+    font-size: 14px;
+    color: rgb(85, 83, 83);
+    display: table;
+    padding: 10px;
+  }
+  nav .fas{
+    position: relative;
+    width: 70px;
+    height: 40px;
+    top: 20px;
+    font-size: 20px;
+    text-align: center;
+  }
+  .nav-item{
+    position: relative;
+    top: 12px;
+    margin-left: 10px;
+  }
+  a:hover{
+    background: #eee;
+  }
+  a:hover i{
+    color: #21cdc0;
+    transition: 0.5s;
+  }
+  .logout{
+    position: absolute;
+    bottom: 0;
+  }
+  
+  .container{
+    display: flex;
+  }
+  
+  /* MAin Section */
+  .main{
+    position: relative;
+    padding: 20px;
+    width: 100%;
+  }
+  .main-top h1 {
+    font-weight: bold; 
+}
+  .main-top{
+    display: flex;
+    font-size: 20px;
+    width: 100%;
+  }
+  .main-top i{
+    position: absolute;
+    right: 0;
+    margin: 10px 30px;
+    color: rgb(110, 109, 109);
+    cursor: pointer;
+  }
+  .main .users{
+    display: flex;
+    width: 100%;
+  }
+  .form-container {
+    min-height: 100vh;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.form-container form {
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 5px;
+}
+
+.form-container form .box {
+    width: 100%;
+    border-radius: 5px;
+    padding: 12px 14px;
+    color: black;
+    font-size: 18px;
+    margin: 10px 0;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+}
+
+.form-container form h3 {
+    margin-bottom: 20px;
+    font-size: 30px;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.btn {
+    width: 100%;
+    border-radius: 5px;
+    padding: 14px 0;
+    display: block;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 20px;
+    background-color: #21cdc0;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #283b6a;
+}
+
+.form-container form p {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+.form-container form p a {
+    color: #21cdc0;
+}
+
+.form-container form select {
+    appearance: none;
+    background-color: #283b6a;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"%3E%3Cpath d="M1 4h14L8 12 1 4z" fill="%23999" /%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px 12px;
+    cursor: pointer;
+}
+
+.form-container form select:focus {
+    border-color: #21cdc0;
+    outline: none;
+}

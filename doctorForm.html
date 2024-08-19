@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor</title>
+    <link rel="stylesheet" href="assets/css/styleDoctorForm.css">
+    <!-- Font Awesome Cdn Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#" class="logo">
+                    <img src="ava.jpg" alt="Logo">
+                    <span class="nav-item">Doctor</span>
+                </a></li>
+                <li><a href="doctor.html">
+                    <i class="fas fa-menorah"></i>
+                    <span class="nav-item">Dashboard</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-comment"></i>
+                    <span class="nav-item">Message</span>
+                </a></li>
+                <li><a href="doctorForm.html">
+                    <i class="fas fa-database"></i>
+                    <span class="nav-item">Form</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="nav-item">Appointment</span>
+                </a></li>
+                <li><a href="#">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-item">Setting</span>
+                </a></li>
+                <li><a href="#" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="nav-item">Log out</span>
+                </a></li>
+            </ul>
+        </nav>
+
+        <section class="main">
+            <div class="main-top">
+                <h1>Form</h1>
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <div class="form-container">
+                <form action="" method="">
+                    <input type="text" name="name" placeholder="Enter username" class="box" required>
+                    <select name="specialization" class="box" required>
+                        <option value="" disabled selected>Select specialization</option>
+                        <option value="cardiologist">Cardiologist</option>
+                        <option value="neurologist">Neurologist</option>
+                        <option value="dermatologist">Dermatologist</option>
+                        <option value="pediatrician">Pediatrician</option>
+                        <option value="orthopedist">Orthopedist</option>
+                    </select>
+                    <input type="text" name="description" placeholder="Enter description" class="box" required>
+                    <input type="submit" value="SUBMIT" class="btn">
+                </form>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
