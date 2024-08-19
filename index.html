@@ -1225,16 +1225,16 @@
     <script src="assets/js/jquery-3.5.1.min.js"></script>
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/main.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
     <script>
         const userId = sessionStorage.getItem('userId');
         const userName = sessionStorage.getItem('userName');
         const userRole = sessionStorage.getItem('userRole');
 
-        if (!userId || !userName || !userRole) {
-            alert('User not logged in. Please log in first.');
-            window.location.href = '/main.html';
-        }
+//        if (!userId || !userName || !userRole) {
+//            alert('User not logged in. Please log in first.');
+//            window.location.href = '/main.html';
+//        }
 
         $(document).ready(function() {
             if (userRole === 'doctor') {
