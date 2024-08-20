@@ -16,7 +16,7 @@
                     <img src="ava.jpg" alt="Logo">
                     <span class="nav-item">Doctor</span>
                 </a></li>
-                <li><a href="doctor.html">
+                <li><a href="doctorDash.html">
                     <i class="fas fa-menorah"></i>
                     <span class="nav-item">Dashboard</span>
                 </a></li>
@@ -49,21 +49,62 @@
                 <i class="fas fa-user-cog"></i>
             </div>
             <div class="form-container">
-                <form action="" method="">
-                    <input type="text" name="name" placeholder="Enter username" class="box" required>
-                    <select name="specialization" class="box" required>
+                <form id="doctorForm" action="" method="">
+                    <input type="text" name="doctorName" id ="doctorName" placeholder="Enter username" class="box" required>
+                    <select name="specialization" id="specialization" class="box" required>
                         <option value="" disabled selected>Select specialization</option>
-                        <option value="cardiologist">Cardiologist</option>
-                        <option value="neurologist">Neurologist</option>
-                        <option value="dermatologist">Dermatologist</option>
-                        <option value="pediatrician">Pediatrician</option>
-                        <option value="orthopedist">Orthopedist</option>
+                        <option value="Cardiology">Cardiology</option>
+                                <option value="Dermatology">Dermatology</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="Pulmonology">Pulmonology</option>
+                                <option value="Otolaryngology">Otolaryngology</option>
                     </select>
-                    <input type="text" name="description" placeholder="Enter description" class="box" required>
+                    <input type="text" name="doctorDescription" id="doctorDescription" placeholder="Enter description" class="box" required>
                     <input type="submit" value="SUBMIT" class="btn">
                 </form>
             </div>
         </section>
+        <div id="responseMessage"></div>
     </div>
+    <script>
+        const userId = sessionStorage.getItem('userId');
+        const userRole = sessionStorage.getItem('userRole');
+    
+        if (!userId || userRole !== 'doctor') {
+            alert('Unauthorized access. Please log in as a doctor.');
+            window.location.href = '/main.html';
+        }
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            let doctorId = userId;
+    
+            document.getElementById('doctorForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                const doctorData = Object.fromEntries(formData.entries());
+                doctorData.userId = userId; // Add userId to form data
+    
+                fetch('/api/register-doctor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(doctorData) // Send data including userId
+                })
+                .then(response => response.json())
+                .then(data => {
+                    doctorId = data.doctorId;
+                    document.getElementById('responseMessage').textContent = data.message;
+                    fetchAppointments();
+                })
+                .catch(error => console.error('Error submitting form:', error));
+            });
+        });
+    </script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
+
