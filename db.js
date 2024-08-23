@@ -120,6 +120,15 @@ const updateAppointmentStatus = async (appointmentId, status) => {
     await query(sql, [status, appointmentId]);
 };
 
+const searchSymptoms = async (symptomName) => {
+    const sql = `SELECT d.name AS disease_name, s.name AS symptom_name
+                 FROM symptoms s
+                 JOIN disease_symptoms ds ON s.id = ds.symptom_id
+                 JOIN diseases d ON ds.disease_id = d.id
+                 WHERE s.name LIKE ?`;
+    return await query(sql, [`%${symptomName}%`]);
+};
+
 module.exports = {
     query,
     // Forum methods
@@ -139,5 +148,6 @@ module.exports = {
     createAppointment,
     getDoctorsBySpecialization,
     getAppointmentsByDoctor,
-    updateAppointmentStatus
+    updateAppointmentStatus,
+    searchSymptoms
 };
