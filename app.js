@@ -11,9 +11,10 @@ const app = express();
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 // Serve the index.html file from the root directory
-app.get('/index.html', (req, res) => {
+app.get('/public/index.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
+
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -100,6 +101,8 @@ const pageRoutes = require('./routes/pages');
 const authRoutes = require('./routes/auth');
 const appointmentsRoutes = require('./routes/appointmentsRoutes');
 const forumRoutes = require('./routes/forumRoutes'); // Adjust path as necessary
+const statisticsRoutes = require('./routes/statisticsRoutes');
+const symptomRoutes = require('./routes/symptom');
 const specializations = require('./routes/specializations')
 
 app.use('/', pageRoutes);
@@ -109,6 +112,8 @@ app.use(doctorRoutes);
 app.use(specializations)
 app.use(appointmentsRoutes);
 app.use('/forum', forumRoutes);
+app.use('/statistics', statisticsRoutes);
+app.use('/api',symptomRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
