@@ -182,13 +182,14 @@
                 <div class="heading-symptom">
                     <h3>Search Symptom</h3>
                 </div><!-- /heading -->
-                <form action="" class="search-symptom">
-                    <input type="text" placeholder="The common symptoms: headache, runny nose, cough and so on. " name="q">
+                <form action="" class="search-symptom" id="symptom-form">
+                    <input type="text" id="symptom-input" placeholder="The common symptoms: headache, runny nose, cough and so on. " name="q">
                     <button type="submit">
                         <a href="#" class="btn btn__primary btn__primary-style2 btn__link">
                             <span>Search</span> 
                         </a>
                     </button>
+                    <div id="results"></div>
                 </form>
             </div><!-- /.container -->
         </section><!-- /.Features Layout 1 -->
@@ -298,7 +299,35 @@
     <script src="assets/js/jquery-3.5.1.min.js"></script>
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/main.js"></script>
-
+    <script>
+        document.getElementById('symptom-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const symptom = document.getElementById('symptom-input').value;
+            fetch('/api/symptom', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ symptom })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(result => {
+                        const diseaseDiv = document.createElement('div');
+                        diseaseDiv.classList.add('result-item');
+                        diseaseDiv.innerHTML = `<strong>Disease:</strong> ${result.disease_name}`;
+                        resultsDiv.appendChild(diseaseDiv);
+                    });
+                } else {
+                    resultsDiv.innerHTML = 'No results found.';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 
 
 </body>
