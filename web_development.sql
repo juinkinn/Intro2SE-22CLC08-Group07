@@ -183,6 +183,67 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`) VALUES
 --
 
 --
+-- Indexes for dumped tables
+--
+CREATE TABLE `symptoms` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) NOT NULL,
+    `description` text,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table `symptoms`
+INSERT INTO `symptoms` (`name`, `description`) VALUES
+('Fever', 'An abnormally high body temperature, usually accompanied by shivering, headache, and in severe instances, delirium.'),
+('Cough', 'A sudden, forceful hacking sound to release air and clear an irritation in the throat or airway.'),
+('Headache', 'Pain in any region of the head.'),
+('Sore Throat', 'Pain or irritation in the throat that can occur with or without swallowing, often accompanies infections such as colds or flu.'),
+('Fatigue', 'Extreme tiredness resulting from mental or physical exertion or illness.');
+
+-- --------------------------------------------------------
+
+-- Table structure for table `diseases`
+CREATE TABLE `diseases` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) NOT NULL,
+    `description` text,
+    `treatment` text,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table `diseases`
+INSERT INTO `diseases` (`name`, `description`, `treatment`) VALUES
+('Common Cold', 'A viral infection of your nose and throat (upper respiratory tract).', 'Rest, fluids, and over-the-counter cold remedies.'),
+('Influenza', 'A viral infection that attacks your respiratory system — your nose, throat, and lungs.', 'Antiviral drugs, rest, and fluids.'),
+('Strep Throat', 'A bacterial infection that can make your throat feel sore and scratchy.', 'Antibiotics and rest.'),
+('Migraine', 'A headache of varying intensity, often accompanied by nausea and sensitivity to light and sound.', 'Medications for pain relief and prevention, lifestyle changes.');
+
+-- --------------------------------------------------------
+
+-- Table structure for table `disease_symptoms`
+CREATE TABLE `disease_symptoms` (
+    `disease_id` int(11) NOT NULL,
+    `symptom_id` int(11) NOT NULL,
+    PRIMARY KEY (`disease_id`, `symptom_id`),
+    FOREIGN KEY (`disease_id`) REFERENCES `diseases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`symptom_id`) REFERENCES `symptoms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table `disease_symptoms`
+INSERT INTO `disease_symptoms` (`disease_id`, `symptom_id`) VALUES
+(1, 1), -- Common Cold - Fever
+(1, 2), -- Common Cold - Cough
+(1, 4), -- Common Cold - Sore Throat
+(1, 5), -- Common Cold - Fatigue
+(2, 1), -- Influenza - Fever
+(2, 2), -- Influenza - Cough
+(2, 5), -- Influenza - Fatigue
+(3, 4), -- Strep Throat - Sore Throat
+(3, 1), -- Strep Throat - Fever
+(4, 3), -- Migraine - Headache
+(4, 5); -- Migraine - Fatigue
+
+--
 -- Indexes for table `appointments`
 --
 ALTER TABLE `appointments`
