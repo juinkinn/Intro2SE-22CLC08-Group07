@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Doctor</title>
+    <link rel="stylesheet" href="assets/css/styleDoctor.css" />
+    <!-- Font Awesome Cdn Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <!-- jQuery CDN Link -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="profile.html" class="logo">
+                    <img src="avatar.jpg" alt="Doctor Logo">
+                    <span class="nav-item">Doctor</span>
+                </a></li>
+                <li><a href="doctorForm.html">
+                    <i class="fas fa-database"></i>
+                    <span class="nav-item">Form</span>
+                </a></li>
+                <li><a href="/auth/logout" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="nav-item">Log out</span>
+                </a></li>
+            </ul>
+        </nav>
+
+        <section class="main">
+            <div class="main-top">
+                <h1>Today's Appointment</h1>
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <div class="users">
+                <!-- User cards here -->
+            </div>
+
+            <section class="appointment">
+                <div class="appointment-list">
+                    <h1>Appointment List</h1>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Appointment ID</th>
+                                <th>Patient</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointmentsList">
+                            <!-- Appointments will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const userId = sessionStorage.getItem('userId');
+
+            if (!userId) {
+                alert('User not logged in. Please log in first.');
+                window.location.href = '/main.html';
+                return;
+            }
+
+            fetchAppointments();
+
+            $(document).on('click', '.accept-btn', function() {
+                const appointmentId = $(this).data('appointment-id');
+                updateAppointmentStatus(appointmentId, 'accepted');
+            });
+
+            $(document).on('click', '.decline-btn', function() {
+                const appointmentId = $(this).data('appointment-id');
+                updateAppointmentStatus(appointmentId, 'declined');
+            });
+
+            function fetchAppointments() {
+                $.get(`/api/appointments?doctorId=${userId}`, function(data) {
+                    renderAppointments(data);
+                });
+            }
+
+            function renderAppointments(appointments) {
+                const appointmentsList = $('#appointmentsList');
+                appointmentsList.empty();
+                appointments.forEach(appointment => {
+                    const formattedDate = formatDate(appointment.day_to_meet);
+                    const formattedTime = formatTime(appointment.time_to_meet);
+                    const appointmentRow = $(`
+                        <tr data-appointment-id="${appointment.id_appointment}">
+                            <td>${appointment.id_appointment}</td>
+                            <td>${appointment.patient_name}</td>
+                            <td>${formattedDate}</td>
+                            <td>${formattedTime}</td>
+                            <td>${appointment.status}</td>
+                            <td>
+                                <button class="btn btn-success accept-btn" data-appointment-id="${appointment.id_appointment}">Accept</button>
+                                <button class="btn btn-danger decline-btn" data-appointment-id="${appointment.id_appointment}">Decline</button>
+                            </td>
+                        </tr>
+                    `);
+                    appointmentsList.append(appointmentRow);
+                });
+            }
+
+            function updateAppointmentStatus(appointmentId, status) {
+                $.ajax({
+                    type: 'PUT',
+                    url: `/api/appointments/${appointmentId}`,
+                    data: JSON.stringify({ status: status }),
+                    contentType: 'application/json',
+                    success: function() {
+                        fetchAppointments();
+                    },
+                    error: function(error) {
+                        console.error('Error updating appointment:', error);
+                    }
+                });
+            }
+
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                const day = ('0' + date.getDate()).slice(-2);
+                const year = date.getFullYear();
+                return `${month}/${day}/${year}`;
+            }
+
+            function formatTime(timeString) {
+                const date = new Date(`1970-01-01T${timeString}Z`);
+                const hours = ('0' + date.getUTCHours()).slice(-2);
+                const minutes = ('0' + date.getUTCMinutes()).slice(-2);
+                return `${hours}:${minutes}`;
+            }
+        });
+    </script>
+</body>
+</html>
