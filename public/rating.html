@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratings</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .rating {
+            margin-bottom: 10px;
+        }
+        .notification {
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Share your ratings and thoughts!</h2>
+        <form id="ratingForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="stars">Rating (1-5)</label>
+                <input type="number" class="form-control" id="stars" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea class="form-control" id="comment" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div id="ratingNotification" class="alert alert-success notification" role="alert">
+            Your rating has been submitted!
+        </div>
+        <hr>
+        <h2>All Ratings</h2>
+        <div id="ratings"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to render ratings
+            function renderRatings(ratings) {
+                const ratingsContainer = $('#ratings');
+                ratingsContainer.empty();
+                ratings.forEach(rating => {
+                    const ratingElement = $(`
+                        <div class="card mb-3 rating">
+                            <div class="card-body">
+                                <h5 class="card-title">${rating.name}</h5>
+                                <p class="card-text">Rating: ${rating.stars} Stars</p>
+                                <p class="card-text">${rating.comment}</p>
+                                <small class="text-muted">Posted on ${new Date(rating.created_at).toLocaleString()}</small>
+                            </div>
+                        </div>
+                    `);
+                    ratingsContainer.append(ratingElement);
+                });
+            }
+
+            // Fetch and render ratings from the server
+            $.get('/api/rate', function(data) {
+                renderRatings(data);
+            });
+
+            $('#ratingForm').submit(function(e) {
+                e.preventDefault();
+                const name = $('#name').val();
+                const stars = $('#stars').val();
+                const comment = $('#comment').val();
+
+                if (name && stars && comment) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/rate',
+                        data: JSON.stringify({ name, stars, comment }),
+                        contentType: 'application/json',
+                        success: function() {
+                            $('#ratingNotification').show().delay(3000).fadeOut();
+                            $('#ratingForm')[0].reset();
+                            $.get('/api/rate', function(data) {
+                                renderRatings(data);
+                            });
+                        },
+                        error: function(error) {
+                            console.error('Error submitting rating:', error);
+                        }
+                    });
+                } else {
+                    alert('Please fill in all fields.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

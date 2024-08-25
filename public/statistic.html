@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin</title>
+  <link rel="stylesheet" href="assets/css/statistic.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <ul>
+        <li><a href="#" class="logo">
+          <img src="path/to/logo.png" alt="Logo">
+          <span class="nav-item">Admin</span>
+        </a></li>
+        <li><a href="#">
+          <i class="fas fa-menorah"></i>
+          <span class="nav-item">Forum</span>
+        </a></li>
+        <li><a href="#">
+          <i class="fas fa-chart-bar"></i>
+          <span class="nav-item">Statistics</span>
+        </a></li>
+        <li><a href="main.html" class="logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="nav-item">Log out</span>
+        </a></li>
+      </ul>
+    </nav>
+
+    <section class="main">
+      <div class="main-top">
+        <h1>Admin Statistics</h1>
+        <i class="fas fa-user-cog"></i>
+      </div>
+
+      <section class="appointment">
+        <div class="appointment-list">
+          <h1>Appointments</h1>
+          <table id="appointmentsTable" class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Patient Name</th>
+                <th>Email</th>
+                <th>Patient Phone</th>
+                <th>Day to Meet</th>
+                <th>Time To Meet</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="appointment1">
+        <div class="appointment1-list">
+          <h1>Posts</h1>
+          <table id="postsTable" class="table1">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Content</th>
+                <th>Author ID</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="appointment1">
+        <div class="appointment1-list">
+          <h1>Comments</h1>
+          <table id="commentsTable" class="table1">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Post ID</th>
+                <th>Content</th>
+                <th>Author ID</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="appointment1">
+        <div class="appointment1-list">
+          <h1>Doctors</h1>
+          <table id="doctorsTable" class="table1">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Doctor Name</th>
+                <th>Specialization</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="appointment1">
+        <div class="appointment1-list">
+          <h1>Patients</h1>
+          <table id="patientsTable" class="table1">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Patient Name</th>
+                <th>Patient Age</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="appointment1">
+        <div class="appointment1-list">
+          <h1>Users</h1>
+          <table id="usersTable" class="table1">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="charts">
+        <div class="chart-container">
+          <h2>User and Patient Statistics Chart</h2>
+          <canvas id="userStatisticsChart" width="400" height="200"></canvas>
+        </div>
+        <div class="chart-container">
+          <h2>Posts and Comments Statistics Chart</h2>
+          <canvas id="postStatisticsChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+      
+    </section>
+  </div>
+  
+  <script>
+    async function fetchData(endpoint, tableId, dateFields = []) {
+      try {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        const tableBody = document.getElementById(tableId).querySelector('tbody');
+        tableBody.innerHTML = '';
+
+        data.forEach(row => {
+          const tr = document.createElement('tr');
+          Object.entries(row).forEach(([key, value]) => {
+            const td = document.createElement('td');
+            if (dateFields.includes(key) && value) {
+              const date = new Date(value);
+              value = date.toLocaleDateString();
+            }
+            td.textContent = value;
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    async function fetchCounts() {
+      try {
+        const response = await fetch('/statistics/countStatistics');
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Error fetching counts:', error);
+        return {};
+      }
+    }
+
+    function renderUserChart(counts) {
+      const ctx = document.getElementById('userStatisticsChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Users', 'Doctors', 'Patients'],
+          datasets: [{
+            label: 'Count',
+            data: [
+              counts.userCount,
+              counts.doctorCount,
+              counts.patientCount
+            ],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    function renderPostChart(counts) {
+      const ctx = document.getElementById('postStatisticsChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Posts', 'Comments'],
+          datasets: [{
+            label: 'Count',
+            data: [
+              counts.postCount,
+              counts.commentCount
+            ],
+            backgroundColor: [
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)'
+            ],
+            borderColor: [
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      fetchData('/statistics', 'appointmentsTable', ['day_to_meet']);
+      fetchData('/statistics/comments', 'commentsTable');
+      fetchData('/statistics/posts', 'postsTable');
+      fetchData('/statistics/doctors', 'doctorsTable');
+      fetchData('/statistics/patients', 'patientsTable');
+      fetchData('/statistics/users', 'usersTable');
+
+      const counts = await fetchCounts();
+      renderUserChart(counts);
+      renderPostChart(counts);
+    });
+  </script>
+</body>
+</html>

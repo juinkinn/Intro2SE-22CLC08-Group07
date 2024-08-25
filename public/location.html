@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pharmacy Locator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    #map {
+      height: 500px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .leaflet-routing-container {
+      background: white !important; /* Background color for better visibility */
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      max-height: 300px; /* Maximum height for the container */
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+    .leaflet-routing-instructions {
+      font-size: 14px !important; /* Adjust font size for better readability */
+      color: #333; /* Dark color for better contrast */
+    }
+    .leaflet-routing-waypoint {
+      font-size: 16px !important; /* Slightly larger font for waypoints */
+      color: #000; /* Black color for waypoint labels */
+    }
+  </style>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Leaflet Routing Machine JS -->
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script>
+    let map;
+    let userLatLng;
+    const pharmacyLatLng = [10.762628968541051, 106.68245952726659]; // Pharmacy coordinates
+
+    function initMap() {
+      map = L.map('map').setView(pharmacyLatLng, 16);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      // Add marker for pharmacy with a distinct color
+      L.marker(pharmacyLatLng, {color: 'red'}).addTo(map)
+        .bindPopup('HCMUS Pharmacy')
+        .openPopup();
+    }
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, handleError, {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        });
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function showPosition(position) {
+      userLatLng = [position.coords.latitude, position.coords.longitude];
+
+      // Log coordinates for debugging
+      console.log('User Latitude:', position.coords.latitude);
+      console.log('User Longitude:', position.coords.longitude);
+
+      // Clear previous markers and routes
+      map.eachLayer(layer => {
+        if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+          layer.remove();
+        }
+      });
+
+      // Center the map on the user's location
+      map.setView(userLatLng, 14);
+
+      // Add a marker for the user's location with a distinct color
+      L.marker(userLatLng, {color: 'blue'}).addTo(map)
+        .bindPopup('Your Location')
+        .openPopup();
+
+      // Use Leaflet Routing Machine to add a route
+      L.Routing.control({
+        waypoints: [
+          L.latLng(userLatLng),
+          L.latLng(pharmacyLatLng)
+        ],
+        routeWhileDragging: true,
+        createMarker: function() { return null; }, // Remove default markers
+        lineOptions: {
+          styles: [
+            { color: 'blue', weight: 5, opacity: 0.8, dashArray: '10, 5' } // Brighter color, thicker line, and dash pattern
+          ]
+        },
+        plan: L.Routing.plan([
+          L.latLng(userLatLng),
+          L.latLng(pharmacyLatLng)
+        ], {
+          createMarker: function() { return null; } // No markers for waypoints
+        })
+      }).addTo(map);
+      
+      // Adjust map view to ensure all markers and routes are visible
+      map.fitBounds([userLatLng, pharmacyLatLng]);
+    }
+
+    function handleError(error) {
+      console.error('Error getting location:', error);
+      alert('Unable to retrieve your location.');
+    }
+
+    window.onload = initMap;
+  </script>
+</head>
+<body>
+  <h1>Pharmacy Locator</h1>
+  <button onclick="getLocation()">Get My Location</button>
+  <div id="map"></div>
+</body>
+</html>
