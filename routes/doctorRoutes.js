@@ -37,9 +37,8 @@ router.get('/api/manage-appointments', async (req, res) => {
         return res.status(400).json({ error: 'Doctor ID is required.' });
     }
 
-    const query = `SELECT a.*, p.patient_name 
-                   FROM appointments a
-                   JOIN patients p ON a.id_patient = p.id_patient 
+    const query = `SELECT a.*
+                   FROM appointments a 
                    WHERE a.id_doctor = ? AND a.status = "pending"`;
 
     try {
