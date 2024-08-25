@@ -243,6 +243,19 @@ INSERT INTO `disease_symptoms` (`disease_id`, `symptom_id`) VALUES
 (4, 3), -- Migraine - Headache
 (4, 5); -- Migraine - Fatigue
 
+CREATE TABLE `rating` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `stars` int(11) NOT NULL CHECK (`stars` between 1 and 5),
+  `comment` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+INSERT INTO `rating` (`id`, `name`, `stars`, `comment`, `created_at`) VALUES
+(1, 'HMQ', 5, 'good', '2024-07-12 01:20:21'),
+(2, 'HMQ', 4, 'good', '2024-07-12 01:42:47');
+
 --
 -- Indexes for table `appointments`
 --
@@ -290,7 +303,11 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+ALTER TABLE `rating`
+  ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `rating`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `appointments`
 --

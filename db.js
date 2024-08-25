@@ -129,6 +129,18 @@ const searchSymptoms = async (symptomName) => {
     return await query(sql, [`%${symptomName}%`]);
 };
 
+// Function to insert a new rating
+const insertRating = async (name, stars, comment) => {
+    const sql = 'INSERT INTO rating (name, stars, comment) VALUES (?, ?, ?)';
+    await query(sql, [name, stars, comment]);
+};
+
+// Function to get all ratings
+const getAllRatings = async () => {
+    const sql = 'SELECT * FROM rating';
+    return await query(sql);
+};
+
 module.exports = {
     query,
     // Forum methods
@@ -149,5 +161,8 @@ module.exports = {
     getDoctorsBySpecialization,
     getAppointmentsByDoctor,
     updateAppointmentStatus,
-    searchSymptoms
+    searchSymptoms,
+    // Rating
+    insertRating,
+    getAllRatings
 };

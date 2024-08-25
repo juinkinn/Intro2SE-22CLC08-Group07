@@ -7,13 +7,14 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const app = express();
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'homepageview.html'));
+});
 // Middleware
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 // Serve the index.html file from the root directory
-app.get('/public/index.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
@@ -103,6 +104,8 @@ const appointmentsRoutes = require('./routes/appointmentsRoutes');
 const forumRoutes = require('./routes/forumRoutes'); // Adjust path as necessary
 const statisticsRoutes = require('./routes/statisticsRoutes');
 const symptomRoutes = require('./routes/symptom');
+const locationRoutes = require('./routes/locationRoutes');
+const ratingRoutes = require('./routes/ratingRoutes');
 const specializations = require('./routes/specializations')
 
 app.use('/', pageRoutes);
@@ -114,6 +117,8 @@ app.use(appointmentsRoutes);
 app.use('/forum', forumRoutes);
 app.use('/statistics', statisticsRoutes);
 app.use('/api',symptomRoutes);
+app.use('/api/location', locationRoutes);
+app.use('/api/rate', ratingRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
