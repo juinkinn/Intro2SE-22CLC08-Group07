@@ -66,24 +66,16 @@ router.put('/posts/:postId', async (req, res) => {
     }
 });
 
-// Delete a post
-router.delete('/posts/:postId', async (req, res) => {
-    const { postId } = req.params;
-    const { authorId } = req.body;
 
+// Route to delete a post
+router.delete('/posts/:id', async (req, res) => {
+    const postId = req.params.id;
+    const userId = req.body.userId;
     try {
-        const post = await db.getPostById(postId);
-        if (!post) {
-            return res.status(404).json({ error: 'Post not found' });
-        }
-        if (post.author_id !== authorId) {
-            return res.status(403).json({ error: 'Not authorized to delete this post' });
-        }
-
-        await db.deletePost(postId);
-        res.status(200).json({ message: 'Post deleted successfully' });
+        await deletePost(postId, userId);
+        res.sendStatus(204); // No Content
     } catch (error) {
-        res.status(500).json({ error: 'Error deleting post' });
+        res.status(403).json({ error: error.message });
     }
 });
 
@@ -134,24 +126,15 @@ router.put('/comments/:commentId', async (req, res) => {
     }
 });
 
-// Delete a comment
-router.delete('/comments/:commentId', async (req, res) => {
-    const { commentId } = req.params;
-    const { authorId } = req.body;
-
+// Route to delete a comment
+router.delete('/comments/:id', async (req, res) => {
+    const commentId = req.params.id;
+    const userId = req.body.userId;
     try {
-        const comment = await db.getCommentById(commentId);
-        if (!comment) {
-            return res.status(404).json({ error: 'Comment not found' });
-        }
-        if (comment.author_id !== authorId) {
-            return res.status(403).json({ error: 'Not authorized to delete this comment' });
-        }
-
-        await db.deleteComment(commentId);
-        res.status(200).json({ message: 'Comment deleted successfully' });
+        await deleteComment(commentId, userId);
+        res.sendStatus(204); // No Content
     } catch (error) {
-        res.status(500).json({ error: 'Error deleting comment' });
+        res.status(403).json({ error: error.message });
     }
 });
 
