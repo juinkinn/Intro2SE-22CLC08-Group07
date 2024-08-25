@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .comment {
+            margin-left: 20px;
+        }
+        .notification {
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Forum</h2>
+        <form id="postForm">
+            <div class="form-group">
+                <label for="postContent">Ask a Question</label>
+                <textarea class="form-control" id="postContent" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+        <div id="postNotification" class="alert alert-success notification" role="alert">
+            You have posted successfully!
+        </div>
+        <div id="commentNotification" class="alert alert-success notification" role="alert">
+            You have commented successfully!
+        </div>
+        <div id="editNotification" class="alert alert-success notification" role="alert">
+            You have edited successfully!
+        </div>
+        <div id="deleteNotification" class="alert alert-success notification" role="alert">
+            You have deleted successfully!
+        </div>
+        <hr>
+        <div id="posts"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        const userId = sessionStorage.getItem('userId');
+        const userName = sessionStorage.getItem('userName');
+        const userRole = sessionStorage.getItem('userRole');
+
+        if (!userId || !userName || !userRole) {
+            alert('User not logged in. Please log in first.');
+            window.location.href = '/main.html';
+        }
+
+        // Function to render posts
+        function renderPosts(posts) {
+            const postsContainer = $('#posts');
+            postsContainer.empty();
+            posts.forEach(post => {
+                const postElement = $(`
+                    <div class="card mb-3 post" data-post-id="${post.id}">
+                        <div class="card-body">
+                            <p class="card-text">${post.content}</p>
+                            <small class="text-muted">by ${post.authorName} (${post.authorRole})</small>
+                            ${post.authorId == userId || userRole === 'admin' ? `
+                                <button class="btn btn-link edit-post-btn" data-post-id="${post.id}">Edit</button>
+                                <button class="btn btn-link delete-post-btn" data-post-id="${post.id}">Delete</button>
+                            ` : ''}
+                            <button class="btn btn-link reply-btn" data-post-id="${post.id}">Reply</button>
+                            <div class="reply-form mt-2" style="display: none;">
+                                <textarea class="form-control reply-content" rows="2" placeholder="Enter your reply"></textarea>
+                                <button class="btn btn-primary mt-2 submit-reply-btn" data-post-id="${post.id}">Submit Reply</button>
+                            </div>
+                            <div class="edit-post-form mt-2" style="display: none;">
+                                <textarea class="form-control edit-post-content" rows="2">${post.content}</textarea>
+                                <button class="btn btn-primary mt-2 submit-edit-post-btn" data-post-id="${post.id}">Submit Edit</button>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="replies">${renderComments(post.comments)}</div>
+                        </div>
+                    </div>
+                `);
+                postsContainer.append(postElement);
+            });
+        }
+
+        // Function to render comments
+        function renderComments(comments) {
+            let commentsHTML = '';
+            comments.forEach(comment => {
+                commentsHTML += `
+                    <div class="card mb-2 comment" data-comment-id="${comment.id}">
+                        <div class="card-body">
+                            <p class="card-text">${comment.content}</p>
+                            <small class="text-muted">by ${comment.authorName} (${comment.authorRole})</small>
+                            ${comment.authorId == userId ? `
+                                <button class="btn btn-link edit-comment-btn" data-comment-id="${comment.id}">Edit</button>
+                                <button class="btn btn-link delete-comment-btn" data-comment-id="${comment.id}">Delete</button>
+                            ` : ''}
+                            <div class="edit-comment-form mt-2" style="display: none;">
+                                <textarea class="form-control edit-comment-content" rows="2">${comment.content}</textarea>
+                                <button class="btn btn-primary mt-2 submit-edit-comment-btn" data-comment-id="${comment.id}">Submit Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            return commentsHTML;
+        }
+
+        $(document).ready(function() {
+            // Fetch and render posts from the server
+            $.get('/forum/posts', function(data) {
+                renderPosts(data);
+            });
+
+            $('#postForm').submit(function(e) {
+                e.preventDefault();
+                const postContent = $('#postContent').val();
+                if (postContent && userId) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/forum/posts',
+                        data: JSON.stringify({ authorId: userId, content: postContent }),
+                        contentType: 'application/json',
+                        success: function(newPost) {
+                            const postElement = $(`
+                                <div class="card mb-3 post" data-post-id="${newPost.id}">
+                                    <div class="card-body">
+                                        <p class="card-text">${newPost.content}</p>
+                                        <small class="text-muted">by ${newPost.authorName} (${newPost.authorRole})</small>
+                                        ${newPost.authorId == userId ? `
+                                            <button class="btn btn-link edit-post-btn" data-post-id="${newPost.id}">Edit</button>
+                                            <button class="btn btn-link delete-post-btn" data-post-id="${newPost.id}">Delete</button>
+                                        ` : ''}
+                                        <button class="btn btn-link reply-btn" data-post-id="${newPost.id}">Reply</button>
+                                        <div class="reply-form mt-2" style="display: none;">
+                                            <textarea class="form-control reply-content" rows="2" placeholder="Enter your reply"></textarea>
+                                            <button class="btn btn-primary mt-2 submit-reply-btn" data-post-id="${newPost.id}">Submit Reply</button>
+                                        </div>
+                                        <div class="edit-post-form mt-2" style="display: none;">
+                                            <textarea class="form-control edit-post-content" rows="2">${newPost.content}</textarea>
+                                            <button class="btn btn-primary mt-2 submit-edit-post-btn" data-post-id="${newPost.id}">Submit Edit</button>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="replies"></div>
+                                    </div>
+                                </div>
+                            `);
+                            $('#posts').append(postElement);
+                            $('#postContent').val('');
+                            $('#postNotification').show().delay(3000).fadeOut();
+                        },
+                        error: function(error) {
+                            console.error('Error creating post:', error);
+                        }
+                    });
+                } else {
+                    alert('User not logged in or no content provided.');
+                }
+            });
+
+            $(document).on('click', '.reply-btn', function() {
+                $(this).siblings('.reply-form').toggle();
+            });
+
+            $(document).on('click', '.submit-reply-btn', function() {
+                const postId = $(this).data('post-id');
+                const replyContent = $(this).siblings('.reply-content').val();
+                if (replyContent && userId) {
+                    $.ajax({
+                        type: 'POST',
+                        url: `/forum/posts/${postId}/comments`,
+                        data: JSON.stringify({ authorId: userId, content: replyContent }),
+                        contentType: 'application/json',
+                        success: function(newComment) {
+                            const commentElement = $(`
+                                <div class="card mb-2 comment" data-comment-id="${newComment.id}">
+                                    <div class="card-body">
+                                        <p class="card-text">${newComment.content}</p>
+                                        <small class="text-muted">by ${newComment.authorName} (${newComment.authorRole})</small>
+                                        ${newComment.authorId == userId ? `
+                                            <button class="btn btn-link edit-comment-btn" data-comment-id="${newComment.id}">Edit</button>
+                                            <button class="btn btn-link delete-comment-btn" data-comment-id="${newComment.id}">Delete</button>
+                                        ` : ''}
+                                        <div class="edit-comment-form mt-2" style="display: none;">
+                                            <textarea class="form-control edit-comment-content" rows="2">${newComment.content}</textarea>
+                                            <button class="btn btn-primary mt-2 submit-edit-comment-btn" data-comment-id="${newComment.id}">Submit Edit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                            $(`.post[data-post-id="${postId}"] .replies`).append(commentElement);
+                            $('#commentNotification').show().delay(3000).fadeOut();
+                        },
+                        error: function(error) {
+                            console.error('Error posting reply:', error);
+                        }
+                    });
+                } else {
+                    alert('User not logged in or no content provided.');
+                }
+            });
+
+            $(document).on('click', '.edit-post-btn', function() {
+                $(this).siblings('.edit-post-form').toggle();
+            });
+
+            $(document).on('click', '.submit-edit-post-btn', function() {
+                const postId = $(this).data('post-id');
+                const updatedContent = $(this).siblings('.edit-post-content').val();
+                if (updatedContent && userId) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: `/forum/posts/${postId}`,
+                        data: JSON.stringify({ content: updatedContent }),
+                        contentType: 'application/json',
+                        success: function(updatedPost) {
+                            $(`.post[data-post-id="${postId}"] .card-text`).text(updatedPost.content);
+                            $(`.post[data-post-id="${postId}"] .edit-post-form`).hide();
+                            $('#editNotification').show().delay(3000).fadeOut();
+                        },
+                        error: function(error) {
+                            console.error('Error editing post:', error);
+                        }
+                    });
+                } else {
+                    alert('User not logged in or no content provided.');
+                }
+            });
+
+            $(document).on('click', '.delete-post-btn', function() {
+                const postId = $(this).data('post-id');
+                const userID = sessionStorage.getItem('userId');
+                if (confirm('Are you sure you want to delete this post?')) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: `/forum/posts/${postId}`,
+                        success: function() {
+                            $(`.post[data-post-id="${postId}"]`).remove();
+                            $('#deleteNotification').show().delay(3000).fadeOut();
+                        },
+                        error: function(error) {
+                            console.error('Error deleting post:', error);
+                        }
+                    });
+                }
+            });
+
+            $(document).on('click', '.edit-comment-btn', function() {
+                $(this).siblings('.edit-comment-form').toggle();
+            });
+
+            $(document).on('click', '.submit-edit-comment-btn', function() {
+                const commentId = $(this).data('comment-id');
+                const updatedContent = $(this).siblings('.edit-comment-content').val();
+                if (updatedContent && userId) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: `/forum/comments/${commentId}`,
+                        data: JSON.stringify({ content: updatedContent }),
+                        contentType: 'application/json',
+                        success: function(updatedComment) {
+                            $(`.comment[data-comment-id="${commentId}"] .card-text`).text(updatedComment.content);
+                            $(`.comment[data-comment-id="${commentId}"] .edit-comment-form`).hide();
+                            $('#editNotification').show().delay(3000).fadeOut();
+                        },
+                        error: function(error) {
+                            console.error('Error editing comment:', error);
+                        }
+                    });
+                } else {
+                    alert('User not logged in or no content provided.');
+                }
+            });
+
+            $(document).on('click', '.delete-comment-btn', function() {
+                const commentId = $(this).data('comment-id');
+                if (confirm('Are you sure you want to delete this comment?')) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: `/forum/comments/${commentId}`,
+                        success: function() {
+                            $(`.comment[data-comment-id="${commentId}"]`).remove();
+                            $('#deleteNotification').show().delay(3000).fadeOut();
+                        },
+                        error: function(error) {
+                            console.error('Error deleting comment:', error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
