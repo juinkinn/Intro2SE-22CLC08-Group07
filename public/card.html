@@ -14,10 +14,10 @@
             <h5 class="card-title" id="userName"></h5>
             <a class="card-text" id="userDescription">DOCTOR ON DUTY</p>
             <a class="card-email" id="userEmail">Email</a>
-            <a href="#" class="btn">Update Profile</a>
-            <a href="#" class="delete-btn">Logout</a>
+            <a href="profile.html" class="btn">Update Profile</a>
+            <a href="/auth/logout" class="delete-btn">Logout</a>
             <a href="#" class="dashboardLink" id="dashboardLink">Go to Dashboard</a>
-            <p>New <a href="#">Login</a> or <a href="#">Register</a></p>
+            <p>New <a href="main.html">Login</a> or <a href="main.html">Register</a></p>
             
         </div>
     </div>
@@ -50,10 +50,10 @@
 
         switch (user.role) {
             case 'admin':
-                document.getElementById('dashboardLink').href = '/admin.html'; // Redirect to admin dashboard
+                document.getElementById('dashboardLink').href = '/adminDash.html'; // Redirect to admin dashboard
                 break;
             case 'doctor':
-                document.getElementById('dashboardLink').href = '/doctor.html'; // Redirect to doctor dashboard
+                document.getElementById('dashboardLink').href = '/doctorDash.html'; // Redirect to doctor dashboard
                 break;
             default:
                 document.getElementById('dashboardLink').href = '/index.html'; // Redirect to patient dashboard
