@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient</title>
+  <link rel="stylesheet" href="assets/css/statistic.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <ul>
+        <li><a href="profile.html" class="logo">
+          <img src="path/to/logo.png" alt="Logo">
+          <span class="nav-item">Patient</span>
+        </a></li>
+        <li><a href="index.html">
+          <i class="fas fa-chart-bar"></i>
+          <span class="nav-item">Homepage</span>
+        </a></li>
+        <li><a href="forum.html">
+          <i class="fas fa-menorah"></i>
+          <span class="nav-item">Forum</span>
+        </a></li>     
+        <li><a href="/auth/logout" class="logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="nav-item">Log out</span>
+        </a></li>
+      </ul>
+    </nav>
+
+    <section class="main">
+      <div class="main-top">
+        <h1>Admin Statistics</h1>
+        <i class="fas fa-user-cog"></i>
+      </div>
+
+      <section class="appointment">
+        <div class="appointment-list">
+          <h1>My Appointments</h1>
+          <table id="appointmentsTable" class="table">
+            <thead>
+              <tr>
+                <th>Doctor</th>
+                <th>Day to Meet</th>
+                <th>Time To Meet</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+    </section>
+  </div>
+  
+  <script>
+    async function fetchData(endpoint, tableId, dateFields = []) {
+      try {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        const tableBody = document.getElementById(tableId).querySelector('tbody');
+        tableBody.innerHTML = '';
+
+        data.forEach(row => {
+          const tr = document.createElement('tr');
+          Object.entries(row).forEach(([key, value]) => {
+            const td = document.createElement('td');
+            if (dateFields.includes(key) && value) {
+              const date = new Date(value);
+              value = date.toLocaleDateString();
+            }
+            td.textContent = value;
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', async () => {
+      const patientId = sessionStorage.getItem('userId');
+      fetchData(`/statistics/appointments?patientId=${patientId}`, 'appointmentsTable', ['day_to_meet']);
+    });
+  </script>
+</body>
+</html>
