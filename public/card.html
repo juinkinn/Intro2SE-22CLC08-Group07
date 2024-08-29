@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medi</title>
+    <link rel="stylesheet" href="cardStyle.css">
+</head>
+<body>
+    <div class="container">
+        <div class="profile">
+            <img src="./avatar.png" alt="User profile picture">
+            <h2>Name</h2>
+            <h5 class="card-title" id="userName"></h5>
+            <a class="card-text" id="userDescription">DOCTOR ON DUTY</p>
+            <a class="card-email" id="userEmail">Email</a>
+            <a href="index.html" class="btn" id="dashboardLink">Go to Dashboard</a>
+            <a href="/auth/logout" class="delete-btn">Logout</a>
+            <a href="profile.html" class="btn">Profile</a>
+            <p>New <a href="main.html">Login</a> or <a href="main.html">Register</a></p>
+            
+        </div>
+    </div>
+    <div class="card-body">
+            
+    </div>
+</body>
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Fetch user data from cookies or session (this example assumes cookies)
+        const getCookie = (name) => {
+            let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) return decodeURIComponent(match[2]);
+        };
+
+        const user = {
+            name: getCookie('userName'),
+            role: getCookie('userRole'),
+            description: getCookie('userDescription'),
+            email: getCookie('userEmail')
+        };
+
+        // Update profile elements with user data
+        document.getElementById('userName').textContent = user.name;
+        document.getElementById('userDescription').textContent = user.description;
+        document.getElementById('userEmail').textContent = user.email;
+
+        // Update greeting based on user role
+
+        switch (user.role) {
+            case 'admin':
+                document.getElementById('dashboardLink').href = '/adminDash.html'; // Redirect to admin dashboard
+                break;
+            case 'doctor':
+                document.getElementById('dashboardLink').href = '/doctorDash.html'; // Redirect to doctor dashboard
+                break;
+            default:
+                document.getElementById('dashboardLink').href = '/index.html'; // Redirect to patient dashboard
+                break;
+        }
+    });
+</script>
+</body>
+</html>
+
